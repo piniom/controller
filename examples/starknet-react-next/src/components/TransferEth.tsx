@@ -136,12 +136,6 @@ export const TransferEth = () => {
         <label htmlFor="mainnet">Mainnet</label>
       </div>
       <button onClick={() => execute005()}>Transfer 0.005 ETH to self</button>
-      <button style={{ marginLeft: "10px" }} onClick={() => executePointOne()}>
-        Transfer 0.1 ETH to self
-      </button>
-      <button style={{ marginLeft: "10px" }} onClick={() => executeOne()}>
-        Transfer 1.0 ETH to self
-      </button>
       {txnHash && (
         <p>
           Transaction hash:{" "}
