@@ -56,6 +56,15 @@ class Account extends BaseAccount {
   ) {
     super({ nodeUrl }, address, signer);
 
+    console.log(
+      "Account constructor called",
+      chainId,
+      nodeUrl,
+      address,
+      signer,
+      webauthn,
+    );
+
     this.rpc = new RpcProvider({ nodeUrl });
     this.selector = selectors["0.0.1"].deployment(address, chainId);
     this.chainId = chainId;

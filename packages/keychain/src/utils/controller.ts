@@ -82,11 +82,13 @@ export default class Controller {
   }
 
   async approve(
-    origin: string,
+    origin: string = process.env.NEXT_PUBLIC_ORIGIN,
     expiresAt: bigint,
-    policies: Policy[],
+    policies: Policy[] = [],
     maxFee?: BigNumberish,
   ) {
+    console.log("approving", origin, expiresAt, policies, maxFee);
+
     if (!this.account) {
       throw new Error("Account not found");
     }
@@ -95,6 +97,8 @@ export default class Controller {
       policies,
       expiresAt,
     );
+
+    console.log("ahhh");
 
     Storage.set(
       selectors[VERSION].session(this.address, origin, this.account.chainId),
@@ -105,6 +109,8 @@ export default class Controller {
         expiresAt: expiresAt.toString(),
       },
     );
+
+    console.log("stored");
   }
 
   revoke(origin: string) {

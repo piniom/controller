@@ -13,6 +13,8 @@ import { motion } from "framer-motion";
 export function Error({ error }: { error?: Error }) {
   if (!error) return null;
 
+  console.error(error);
+
   return (
     <Accordion
       as={motion.div}
