@@ -87,6 +87,8 @@ export default class Controller {
     policies: Policy[],
     maxFee?: BigNumberish,
   ) {
+    console.log(origin, expiresAt, policies, maxFee);
+
     if (!this.account) {
       throw new Error("Account not found");
     }
