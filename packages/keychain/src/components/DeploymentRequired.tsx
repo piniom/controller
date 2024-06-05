@@ -1,5 +1,4 @@
 import { constants } from "starknet";
-import Controller from "utils/controller";
 import { Container } from "./Container";
 import { useEffect, useState } from "react";
 import { Status } from "utils/account";
@@ -8,20 +7,18 @@ import { Button, Link } from "@chakra-ui/react";
 import { ExternalIcon } from "@cartridge/ui";
 import { PortalBanner } from "./PortalBanner";
 import { PortalFooter } from "./PortalFooter";
+import { useController } from "hooks/controller";
 
 export function DeploymentRequired({
-  chainId,
-  controller,
   onClose,
   onLogout,
   children,
 }: {
-  chainId: string;
-  controller: Controller;
   onClose: () => void;
   onLogout: () => void;
   children: React.ReactNode;
 }) {
+  const { controller } = useController()
   const account = controller.account;
   const [status, setStatus] = useState<Status>(account.status);
   const [deployHash, setDeployHash] = useState<string>();
@@ -59,11 +56,10 @@ export function DeploymentRequired({
 
         {status === Status.DEPLOYING && (
           <Link
-            href={`https://${
-              account.chainId === constants.StarknetChainId.SN_SEPOLIA
-                ? "sepolia."
-                : undefined
-            }starkscan.co/tx/${deployHash}`}
+            href={`https://${account.chainId === constants.StarknetChainId.SN_SEPOLIA
+              ? "sepolia."
+              : undefined
+              }starkscan.co/tx/${deployHash}`}
             isExternal
           >
             <Button variant="link" mt={10} rightIcon={<ExternalIcon />}>

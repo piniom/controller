@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Text, VStack, Button } from "@chakra-ui/react";
-
-import Controller from "utils/controller";
 import { Call as StarknetCall, InvocationsDetails } from "starknet";
 import { Fees } from "./Fees";
 import { formatEther } from "viem";
@@ -16,14 +14,14 @@ import {
   PortalFooter,
 } from "components/PortalFooter";
 import LowEth from "./LowEth";
+import { useChainId } from "hooks/connection";
+import { useController } from "hooks/controller";
 
 export const CONTRACT_ETH =
   "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7";
 
 export function Execute({
   // origin,
-  chainId,
-  controller,
   transactions,
   transactionsDetail,
   // abis,
@@ -32,8 +30,6 @@ export function Execute({
   onLogout,
 }: {
   // origin: string;
-  chainId: string;
-  controller: Controller;
   transactions: StarknetCall | StarknetCall[];
   transactionsDetail?: InvocationsDetails;
   // abis?: Abi[];
@@ -41,6 +37,9 @@ export function Execute({
   onCancel: () => void;
   onLogout: () => void;
 }) {
+  const chainId = useChainId();
+  const { controller } = useController();
+
   const [fees, setFees] = useState<{
     base: bigint;
     max: bigint;
@@ -140,7 +139,6 @@ export function Execute({
   if (lowEth) {
     return (
       <LowEth
-        chainId={chainId}
         address={controller.account.address}
         balance={format(ethBalance)}
       />
@@ -163,7 +161,6 @@ export function Execute({
             {calls.map((call, i) => (
               <Call
                 key={i}
-                chainId={chainId}
                 policy={{
                   target: call.contractAddress,
                   method: call.entrypoint,
@@ -177,7 +174,6 @@ export function Execute({
         <VStack w="full">
           <Fees
             error={error}
-            chainId={chainId}
             fees={fees}
             balance={ethBalance && format(ethBalance)}
           />

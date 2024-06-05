@@ -1,4 +1,4 @@
-import { constants, addAddressPadding } from "starknet";
+import { addAddressPadding } from "starknet";
 import { Container } from "./Container";
 import Controller from "utils/controller";
 import { useEffect } from "react";
@@ -7,6 +7,7 @@ import { DeployAccountDocument, AccountInfoDocument } from "generated/graphql";
 import { Status } from "utils/account";
 import { SparklesDuoIcon } from "@cartridge/ui";
 import { PortalBanner } from "./PortalBanner";
+import { useChainId } from "hooks/connection";
 
 export function Redeploy({
   controller,
@@ -15,6 +16,8 @@ export function Redeploy({
   controller: Controller;
   onLogout: () => void;
 }) {
+  const chainId = useChainId();
+
   useEffect(() => {
     const deploy = async () => {
       const result = await client.request(AccountInfoDocument, {

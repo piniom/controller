@@ -3,27 +3,24 @@ import { Button, Flex, Text } from "@chakra-ui/react";
 import { shortString, Signature, TypedData } from "starknet";
 import { Container } from "./Container";
 import { PortalBanner } from "./PortalBanner";
-import Controller from "utils/controller";
 import { TransferDuoIcon } from "@cartridge/ui";
 import { PortalFooter } from "./PortalFooter";
+import { useController } from "hooks/controller";
 
 export function SignMessage({
-  controller,
   origin,
   typedData,
-  chainId,
   onSign,
   onCancel,
   onLogout,
 }: {
-  controller: Controller;
   origin: string;
   typedData: TypedData;
-  chainId: string;
   onSign: (sig: Signature) => void;
   onCancel: () => void;
   onLogout: () => void;
 }) {
+  const { controller } = useController();
   const [messageData, setMessageData] = useState<TypedData>();
 
   useEffect(() => {

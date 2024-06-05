@@ -7,14 +7,12 @@ import { useState } from "react";
 import { useController } from "hooks/controller";
 
 export function CreateSession({
-  chainId,
   policies,
   origin,
   onConnect,
   onCancel,
   onLogout,
 }: {
-  chainId: string;
   policies: Policy[];
   origin: string;
   onConnect: (policies: Policy[]) => void;

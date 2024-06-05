@@ -110,3 +110,8 @@ export function useConnection() {
 
   return ctx;
 }
+
+export function useChainId() {
+  const { chainId } = useConnection();
+  return chainId
+}

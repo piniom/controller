@@ -21,7 +21,7 @@ import { diff } from "utils/controller";
 import { logout } from "utils/connection/logout";
 
 function Home() {
-  const { context, controller, chainId, setContext, error } = useConnection();
+  const { context, controller, setContext, error } = useConnection();
 
   if (window.self === window.top) {
     return <></>;
@@ -66,7 +66,6 @@ function Home() {
 
       return (
         <CreateSession
-          chainId={chainId}
           origin={ctx.origin}
           policies={ctx.type === "connect" ? (ctx as ConnectCtx).policies : []}
           onConnect={(policies) => {
@@ -108,8 +107,6 @@ function Home() {
       const ctx = context as SignMessageCtx;
       return (
         <SignMessage
-          chainId={chainId}
-          controller={controller}
           origin={ctx.origin}
           typedData={ctx.typedData}
           onSign={(sig: Signature) => context.resolve(sig)}
@@ -128,8 +125,6 @@ function Home() {
 
       return (
         <DeploymentRequired
-          chainId={chainId}
-          controller={controller}
           onClose={() =>
             ctx.resolve({
               code: ResponseCodes.CANCELED,
@@ -140,8 +135,6 @@ function Home() {
         >
           <Execute
             {...ctx}
-            chainId={chainId}
-            controller={controller}
             onExecute={(res: ExecuteReply) => ctx.resolve(res)}
             onCancel={() =>
               ctx.resolve({
