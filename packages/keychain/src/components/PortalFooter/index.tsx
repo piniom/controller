@@ -5,18 +5,14 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { TransactionSummary } from "./TransactionSummary";
 import { WedgeUpIcon } from "@cartridge/ui";
 import { Policy } from "@cartridge/controller";
-import { SessionDetails } from "./SessionDetails";
 import React, { useMemo } from "react";
 import { FOOTER_HEIGHT } from "components";
-import {
-  BANNER_HEIGHT,
-  ICON_OFFSET,
-  ICON_SIZE,
-} from "components/Container/Header";
 import { motion } from "framer-motion";
+import { TOP_OFFSET } from "../Container/Header";
+import { SessionDetails } from "./SessionDetails";
+import { TransactionSummary } from "./TransactionSummary";
 
 export function PortalFooter({
   children,
@@ -42,13 +38,7 @@ export function PortalFooter({
   const height = useMemo(
     () =>
       isOpen
-        ? `${
-            window.innerHeight -
-            BANNER_HEIGHT -
-            FOOTER_HEIGHT +
-            ICON_SIZE / 2 -
-            ICON_OFFSET
-          }px`
+        ? `${window.innerHeight - TOP_OFFSET - FOOTER_HEIGHT}px`
         : "auto",
     [isOpen],
   );
@@ -104,6 +94,7 @@ export function PortalFooter({
                 />
               }
               size="sm"
+              h={8}
               bg="solid.primary"
               zIndex="999999"
               onClick={onToggle}
@@ -114,31 +105,6 @@ export function PortalFooter({
         {isOpen && policies && (
           <SessionDetails policies={policies} isOpen={isOpen} />
         )}
-
-        {/* TODO: starter pack
-          starterData && remaining > 0 && (
-          <>
-            <HStack gap="10px">
-              {starterData.game.starterPack.starterPackTokens.map(
-                (data, key) => (
-                  <ImageFrame
-                    key={key}
-                    bgImage={`url(${data.token.thumbnail.uri})`}
-                  />
-                ),
-              )}
-              <ImageFrame>
-                <OlmechIcon boxSize="30px" />
-              </ImageFrame>
-            </HStack>
-            <HStack align="flex-start">
-              <SparklesSolidIcon />
-              <Text fontSize="12px" color="whiteAlpha.600">
-                Claim Starterpack
-              </Text>
-            </HStack>
-          </>
-                ) */}
       </VStack>
 
       <Spacer />

@@ -17,16 +17,16 @@ import { ArrowLeftIcon, CartridgeColorIcon } from "@cartridge/ui";
 // import { AccountMenu } from "./AccountMenu";
 import { useController } from "hooks/controller";
 import { useControllerTheme } from "hooks/theme";
+import { useConnection } from "hooks/connection";
+import { useRouter } from "next/router";
 
 export type HeaderProps = {
-  chainId?: string;
   onLogout?: () => void;
   onBack?: () => void;
   hideAccount?: boolean;
 };
 
 export function Header({
-  // chainId,
   // onLogout,
   onBack,
   hideAccount,
@@ -45,6 +45,8 @@ export function Header({
   if (!address || hideAccount) {
     return (
       <Container h={BANNER_HEIGHT} position="relative">
+        <CloseButton />
+
         <VStack
           h="full"
           w="full"
@@ -83,6 +85,7 @@ export function Header({
 
   return (
     <Container h={12} p={2}>
+      <CloseButton />
       <HStack w="full">
         {onBack ? (
           <IconButton
@@ -109,6 +112,29 @@ export function Header({
   );
 }
 
+function CloseButton() {
+  const { close } = useConnection();
+  const router = useRouter();
+
+  if (router.pathname !== "/") {
+    return null
+  }
+
+  return (
+    <IconButton
+      aria-label="Close Keychain"
+      icon={<TimesIcon />}
+      position="absolute"
+      zIndex="9999999"
+      colorScheme="translucent"
+      top={3}
+      left={3}
+      onClick={close}
+    />
+  )
+}
+
+
 function Container({
   h,
   children,
@@ -122,7 +148,6 @@ function Container({
       w="full"
       top="0"
       left="0"
-      // position="fixed"
       zIndex="overlay"
       align="center"
       justify="center"
@@ -139,7 +164,8 @@ function Container({
   );
 }
 
-export const BANNER_HEIGHT = 150;
-export const ICON_IMAGE_SIZE = 64;
-export const ICON_SIZE = 80;
-export const ICON_OFFSET = 32;
+const BANNER_HEIGHT = 150;
+const ICON_IMAGE_SIZE = 64;
+const ICON_SIZE = 80;
+const ICON_OFFSET = 32;
+export const TOP_OFFSET = 64;

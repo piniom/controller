@@ -6,7 +6,7 @@ import { Container } from "../Container";
 import { PortalBanner } from "components/PortalBanner";
 import { PortalFooter } from "components/PortalFooter";
 
-type AuthAction = "signup" | "login";
+export type AuthAction = "signup" | "login";
 
 export function Authenticate({
   name,

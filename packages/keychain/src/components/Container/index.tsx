@@ -6,18 +6,16 @@ import {
   Show,
   HStack,
   Text,
-  IconButton,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { Header, HeaderProps } from "./Header";
-import { constants } from "starknet";
-import { CartridgeLogo, TimesIcon } from "@cartridge/ui";
+import { CartridgeLogo } from "@cartridge/ui";
 import { useConnection } from "hooks/connection";
+import { useRouter } from "next/router";
 
 export function Container({
   children,
-  chainId = constants.StarknetChainId.SN_SEPOLIA,
   onBack,
   hideAccount,
   ...rest
@@ -25,24 +23,16 @@ export function Container({
   children: ReactNode;
 } & StyleProps &
   HeaderProps) {
-  const { close } = useConnection();
+  const { context } = useConnection();
+
+  const router = useRouter();
+  const showFooter = useMemo(() =>
+    context?.type === "connect" || router.pathname.startsWith("/slot/")
+    , [context?.type, router.pathname])
 
   return (
     <Wrapper {...rest}>
-      <IconButton
-        aria-label="Close Keychain"
-        icon={<TimesIcon />}
-        position="absolute"
-        zIndex="9999999"
-        colorScheme="translucent"
-        size="sm"
-        h={8}
-        top={3}
-        left={3}
-        onClick={close}
-      />
-
-      <Header chainId={chainId} onBack={onBack} hideAccount={hideAccount} />
+      <Header onBack={onBack} hideAccount={hideAccount} />
 
       <VStack
         w="full"
@@ -60,25 +50,27 @@ export function Container({
         {children}
       </VStack>
 
-      <HStack
-        w="full"
-        borderTopWidth={1}
-        borderColor="solid.tertiary"
-        color="text.secondary"
-        alignItems="center"
-        justify="center"
-        h={FOOTER_HEIGHT / 4}
-        bottom={0}
-        position={["fixed", "fixed", "absolute"]}
-        gap={1}
-      >
-        <Text fontSize="xs" color="currentColor">
-          Controller by
-        </Text>
+      {showFooter && (
+        <HStack
+          w="full"
+          borderTopWidth={1}
+          borderColor="solid.tertiary"
+          color="text.secondary"
+          alignItems="center"
+          justify="center"
+          h={FOOTER_HEIGHT / 4}
+          bottom={0}
+          position={["fixed", "fixed", "absolute"]}
+          gap={1}
+        >
+          <Text fontSize="xs" color="currentColor">
+            Controller by
+          </Text>
 
-        <CartridgeLogo fontSize={100} color="text.secondary" />
-      </HStack>
-    </Wrapper>
+          <CartridgeLogo fontSize={100} color="text.secondary" />
+        </HStack>
+      )}
+    </Wrapper >
   );
 }
 
