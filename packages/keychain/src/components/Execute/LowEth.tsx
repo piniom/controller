@@ -7,17 +7,15 @@ import { BigNumberish } from "starknet";
 import { formatAddress } from "utils/contracts";
 
 const NewLowEth = ({
-  chainId,
   address,
   balance,
 }: {
-  chainId: string;
   address: BigNumberish;
   balance: BigNumberish;
 }) => {
   const [copied, setCopied] = useState(false);
   return (
-    <Container chainId={chainId} hideAccount>
+    <Container hideAccount>
       <PortalBanner
         title="Insufficient Funds"
         description="You'll need more gas to complete this transaction. Send some ETH to your controller address."

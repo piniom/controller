@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "@chakra-ui/react";
-import { Unsupported } from "./Unsupported";
+import { Unsupported, useIsSupported } from "./Unsupported";
 import { doSignup } from "hooks/account";
-import { Container } from "../Container";
+import { Container } from "components/Container";
 import { PortalBanner } from "components/PortalBanner";
 import { PortalFooter } from "components/PortalFooter";
 
@@ -18,7 +18,7 @@ export function Authenticate({
   onSuccess: () => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [unsupportedMessage, setUnsupportedMessage] = useState<string>();
+  const { isSupported, message } = useIsSupported();
 
   const onAuth = useCallback(async () => {
     setIsLoading(true);
@@ -37,25 +37,14 @@ export function Authenticate({
       onSuccess();
     } catch (e) {
       console.error(e);
-      setIsLoading(false);
       throw e;
+    } finally {
+      setIsLoading(false);
     }
   }, [onSuccess, action, name]);
 
-  useEffect(() => {
-    const userAgent = window.navigator.userAgent;
-    if (/iPad|iPhone|iPod/.test(userAgent)) {
-      const iosVersion = /OS (\d+)_?(?:\d+_?){0,2}\s/.exec(userAgent);
-      if (iosVersion && Number(iosVersion[1]) < 16) {
-        setUnsupportedMessage(
-          `iOS ${iosVersion[1]} does not support passkeys. Upgrade to iOS 16 to continue`,
-        );
-      }
-    }
-  }, []);
-
-  if (unsupportedMessage) {
-    return <Unsupported message={unsupportedMessage} />;
+  if (!isSupported) {
+    return <Unsupported message={message} />;
   }
 
   const title =
@@ -70,17 +59,16 @@ export function Authenticate({
     ) : (
       <>Please click continue.</>
     );
-  return (
-    <>
-      <Container hideAccount>
-        <PortalBanner title={title} description={description} />
 
-        <PortalFooter>
-          <Button colorScheme="colorful" onClick={onAuth} isLoading={isLoading}>
-            continue
-          </Button>
-        </PortalFooter>
-      </Container>
-    </>
+  return (
+    <Container hideAccount>
+      <PortalBanner title={title} description={description} />
+
+      <PortalFooter>
+        <Button colorScheme="colorful" onClick={onAuth} isLoading={isLoading}>
+          continue
+        </Button>
+      </PortalFooter>
+    </Container>
   );
 }

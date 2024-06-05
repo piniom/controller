@@ -26,7 +26,7 @@ export function CreateSession({
   const [expiresAt] = useState<bigint>(3000000000n);
   const [maxFees] = useState<BigNumberish>();
   return (
-    <Container chainId={chainId} onLogout={onLogout}>
+    <Container onLogout={onLogout}>
       <PortalBanner
         Icon={PlugNewDuoIcon}
         title="Create Session"

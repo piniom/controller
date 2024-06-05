@@ -50,7 +50,7 @@ export function DeploymentRequired({
 
   if (status === Status.DEPLOYING) {
     return (
-      <Container chainId={chainId} onLogout={onLogout}>
+      <Container onLogout={onLogout}>
         <PortalBanner
           Icon={Loading}
           title={"Deploying your account"}

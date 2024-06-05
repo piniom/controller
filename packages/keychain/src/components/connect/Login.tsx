@@ -84,7 +84,7 @@ export function Login({
   );
 
   return (
-    <Container chainId={chainId} overflowY={error ? "auto" : undefined}>
+    <Container overflowY={error ? "auto" : undefined}>
       <Formik
         initialValues={{ username: prefilledName }}
         onSubmit={onSubmit}
@@ -105,6 +105,7 @@ export function Login({
             <VStack
               align="stretch"
               pb={error ? PORTAL_FOOTER_MIN_HEIGHT : undefined}
+              px={4}
             >
               <FormikField
                 name="username"

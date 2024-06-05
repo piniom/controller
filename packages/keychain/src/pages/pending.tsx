@@ -31,7 +31,7 @@ const Pending: NextPage = () => {
 
   return (
     <>
-      <Container chainId={chainId}>
+      <Container>
         <PortalBanner
           Icon={TimerDuoIcon}
           title={title}

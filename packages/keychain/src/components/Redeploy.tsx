@@ -9,11 +9,9 @@ import { SparklesDuoIcon } from "@cartridge/ui";
 import { PortalBanner } from "./PortalBanner";
 
 export function Redeploy({
-  chainId,
   controller,
   onLogout,
 }: {
-  chainId: constants.StarknetChainId;
   controller: Controller;
   onLogout: () => void;
 }) {
@@ -39,7 +37,7 @@ export function Redeploy({
   }, [chainId, controller]);
 
   return (
-    <Container chainId={chainId} onLogout={onLogout}>
+    <Container onLogout={onLogout}>
       <PortalBanner
         Icon={SparklesDuoIcon}
         title="Deploying your account"

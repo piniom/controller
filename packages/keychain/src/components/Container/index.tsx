@@ -4,15 +4,10 @@ import {
   StyleProps,
   Flex,
   Show,
-  HStack,
-  Text,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { ReactNode, useMemo } from "react";
+import { ReactNode } from "react";
 import { Header, HeaderProps } from "./Header";
-import { CartridgeLogo } from "@cartridge/ui";
-import { useConnection } from "hooks/connection";
-import { useRouter } from "next/router";
 
 export function Container({
   children,
@@ -23,13 +18,6 @@ export function Container({
   children: ReactNode;
 } & StyleProps &
   HeaderProps) {
-  const { context } = useConnection();
-
-  const router = useRouter();
-  const showFooter = useMemo(() =>
-    context?.type === "connect" || router.pathname.startsWith("/slot/")
-    , [context?.type, router.pathname])
-
   return (
     <Wrapper {...rest}>
       <Header onBack={onBack} hideAccount={hideAccount} />
@@ -37,8 +25,6 @@ export function Container({
       <VStack
         w="full"
         h="full"
-        p={4}
-        pt={12}
         overflowY="auto"
         css={{
           "::-webkit-scrollbar": {
@@ -49,28 +35,7 @@ export function Container({
       >
         {children}
       </VStack>
-
-      {showFooter && (
-        <HStack
-          w="full"
-          borderTopWidth={1}
-          borderColor="solid.tertiary"
-          color="text.secondary"
-          alignItems="center"
-          justify="center"
-          h={FOOTER_HEIGHT / 4}
-          bottom={0}
-          position={["fixed", "fixed", "absolute"]}
-          gap={1}
-        >
-          <Text fontSize="xs" color="currentColor">
-            Controller by
-          </Text>
-
-          <CartridgeLogo fontSize={100} color="text.secondary" />
-        </HStack>
-      )}
-    </Wrapper >
+    </Wrapper>
   );
 }
 

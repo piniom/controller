@@ -6,17 +6,12 @@ import {
   Container as ChakraContainer,
   StyleProps,
   IconButton,
-  VStack,
-  Image,
-  Center,
-  useColorMode,
 } from "@chakra-ui/react";
-import { ArrowLeftIcon, CartridgeColorIcon } from "@cartridge/ui";
+import { ArrowLeftIcon, TimesIcon } from "@cartridge/ui";
 // import { NetworkButton } from "./NetworkButton";
 // import { EthBalance } from "./EthBalance";
 // import { AccountMenu } from "./AccountMenu";
 import { useController } from "hooks/controller";
-import { useControllerTheme } from "hooks/theme";
 import { useConnection } from "hooks/connection";
 import { useRouter } from "next/router";
 
@@ -33,59 +28,9 @@ export function Header({
 }: HeaderProps) {
   const { controller } = useController();
   const address = useMemo(() => controller?.address, [controller]);
-  const theme = useControllerTheme();
-  const { colorMode } = useColorMode();
-
-  const cover = useMemo(
-    () =>
-      typeof theme.cover === "string" ? theme.cover : theme.cover[colorMode],
-    [theme, colorMode],
-  );
-
-  if (!address || hideAccount) {
-    return (
-      <Container h={BANNER_HEIGHT} position="relative">
-        <CloseButton />
-
-        <VStack
-          h="full"
-          w="full"
-          bg={`url('${cover}')`}
-          bgSize="cover"
-          bgPos="center"
-          position="relative"
-        >
-          <Center
-            position="absolute"
-            bottom={-ICON_OFFSET / 4}
-            left={0}
-            right={0}
-          >
-            <Flex
-              bg="darkGray.700"
-              borderRadius="lg"
-              h={`${ICON_SIZE}px`}
-              w={`${ICON_SIZE}px`}
-              justify="center"
-              alignItems="center"
-              borderWidth={4}
-              borderColor="solid.bg"
-            >
-              <Image
-                src={theme.icon}
-                boxSize={ICON_IMAGE_SIZE / 4}
-                alt="Controller Icon"
-              />
-            </Flex>
-          </Center>
-        </VStack>
-      </Container>
-    );
-  }
 
   return (
-    <Container h={12} p={2}>
-      <CloseButton />
+    <Container>
       <HStack w="full">
         {onBack ? (
           <IconButton
@@ -95,18 +40,19 @@ export function Header({
             icon={<ArrowLeftIcon />}
             onClick={onBack}
           />
-        ) : theme.id === "cartridge" ? (
-          <CartridgeColorIcon boxSize={8} />
-        ) : (
-          <Image src={theme.icon} boxSize={8} alt="Controller Icon" />
-        )}
+        ) :
+          <CloseButton />
+        }
 
         <Spacer />
 
-        {/* <NetworkButton chainId={chainId} /> */}
-        {/* <EthBalance chainId={chainId} address={address} /> */}
-
-        {/* {chainId && <AccountMenu onLogout={onLogout} address={address} />} */}
+        {!!address && !hideAccount && (
+          <>
+            {/* <NetworkButton chainId={chainId} /> */}
+            {/* <EthBalance chainId={chainId} address={address} /> */}
+            {/* {chainId && <AccountMenu onLogout={onLogout} address={address} />} */}
+          </>
+        )}
       </HStack>
     </Container>
   );
@@ -117,23 +63,17 @@ function CloseButton() {
   const router = useRouter();
 
   if (router.pathname !== "/") {
-    return null
+    return null;
   }
 
   return (
     <IconButton
       aria-label="Close Keychain"
-      icon={<TimesIcon />}
-      position="absolute"
-      zIndex="9999999"
-      colorScheme="translucent"
-      top={3}
-      left={3}
+      icon={<TimesIcon fontSize={24} />}
       onClick={close}
     />
-  )
+  );
 }
-
 
 function Container({
   h,
@@ -146,15 +86,13 @@ function Container({
     <Flex
       h={h}
       w="full"
-      top="0"
-      left="0"
       zIndex="overlay"
       align="center"
       justify="center"
       flexShrink={0}
-      borderBottomWidth={1}
-      borderBottomColor="solid.spacer"
-      bg="solid.bg"
+      bg="transparent"
+      position="fixed"
+      p={2}
       {...rest}
     >
       <ChakraContainer p={0} h="full" centerContent>
@@ -164,8 +102,4 @@ function Container({
   );
 }
 
-const BANNER_HEIGHT = 150;
-const ICON_IMAGE_SIZE = 64;
-const ICON_SIZE = 80;
-const ICON_OFFSET = 32;
 export const TOP_OFFSET = 64;

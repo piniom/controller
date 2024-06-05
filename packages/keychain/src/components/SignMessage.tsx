@@ -64,7 +64,7 @@ export function SignMessage({
   }, [controller, onSign, typedData]);
 
   return (
-    <Container chainId={chainId} onLogout={onLogout}>
+    <Container onLogout={onLogout}>
       <PortalBanner
         Icon={TransferDuoIcon}
         title="Signature Request"

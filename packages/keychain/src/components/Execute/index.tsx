@@ -148,7 +148,7 @@ export function Execute({
   }
 
   return (
-    <Container chainId={chainId} onLogout={onLogout}>
+    <Container onLogout={onLogout}>
       <PortalBanner Icon={TransactionDuoIcon} title="Submit Transaction" />
 
       <VStack w="full" pb={lowEth ? undefined : PORTAL_FOOTER_MIN_HEIGHT}>

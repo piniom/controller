@@ -180,7 +180,11 @@ function Form({
         description="Create your Cartridge Controller"
       />
 
-      <VStack align="stretch" pb={error ? PORTAL_FOOTER_MIN_HEIGHT : undefined}>
+      <VStack
+        align="stretch"
+        pb={error ? PORTAL_FOOTER_MIN_HEIGHT : undefined}
+        px={4}
+      >
         <FormikField
           name="username"
           placeholder="Username"
