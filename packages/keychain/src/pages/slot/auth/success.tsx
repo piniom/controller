@@ -1,8 +1,7 @@
-import { NextPage } from "next";
 import { Container, Banner } from "components/layout";
 import { SparklesDuoIcon } from "@cartridge/ui";
 
-const Consent: NextPage = () => {
+export default function Consent() {
   return (
     <Container hideAccount>
       <Banner
@@ -13,5 +12,3 @@ const Consent: NextPage = () => {
     </Container>
   );
 };
-
-export default Consent;

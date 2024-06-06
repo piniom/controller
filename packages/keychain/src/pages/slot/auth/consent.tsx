@@ -1,11 +1,10 @@
 import Controller from "utils/controller";
 import { Button, Text } from "@chakra-ui/react";
 import { Container, Banner, Footer } from "components/layout";
-import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 
-const Consent: NextPage = () => {
+export default function Consent() {
   const router = useRouter();
 
   const onSubmit = useCallback(async () => {
@@ -42,7 +41,7 @@ const Consent: NextPage = () => {
         }
       />
 
-      <Footer showTerm={false}>
+      <Footer showLogo>
         <Button colorScheme="colorful" onClick={onSubmit}>
           approve
         </Button>
@@ -52,5 +51,3 @@ const Consent: NextPage = () => {
     </Container>
   );
 };
-
-export default Consent;

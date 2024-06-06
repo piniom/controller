@@ -6,10 +6,10 @@ import { formatEther } from "viem";
 import { ExecuteReply, ResponseCodes } from "@cartridge/controller";
 import {
   Container,
+  Content,
   Banner,
   FOOTER_MIN_HEIGHT,
   Footer,
-  Content,
 } from "components/layout";
 import { Status } from "utils/account";
 import { TransactionDuoIcon } from "@cartridge/ui";
@@ -150,51 +150,47 @@ export function Execute({
     <Container onLogout={onLogout}>
       <Banner Icon={TransactionDuoIcon} title="Submit Transaction" />
 
-      <VStack w="full" pb={FOOTER_MIN_HEIGHT}>
-        <Content>
-          <VStack spacing="1px" w="full" borderRadius="md" bg="solid.primary">
-            <VStack w="full" p={3} align="flex-start">
-              <Text fontSize="xs" fontWeight="bold" color="text.secondaryAccent">
-                Actions
-              </Text>
-            </VStack>
-
-            <VStack w="full" spacing="1px">
-              {calls.map((call, i) => (
-                <Call
-                  key={i}
-                  policy={{
-                    target: call.contractAddress,
-                    method: call.entrypoint,
-                  }}
-                  _last={{ borderBottomRadius: "md" }}
-                />
-              ))}
-            </VStack>
+      <Content pb={FOOTER_MIN_HEIGHT}>
+        <VStack spacing="1px" w="full" borderRadius="md" bg="solid.primary">
+          <VStack w="full" p={3} align="flex-start">
+            <Text fontSize="xs" fontWeight="bold" color="text.secondaryAccent">
+              Actions
+            </Text>
           </VStack>
-        </Content>
 
-        <VStack w="full">
-          <Fees
-            error={error}
-            fees={fees}
-            balance={ethBalance && format(ethBalance)}
-          />
-
-          <Footer>
-            <Button
-              colorScheme="colorful"
-              onClick={onSubmit}
-              isLoading={isLoading}
-              isDisabled={!fees}
-            >
-              submit
-            </Button>
-
-            <Button onClick={onCancel}>Cancel</Button>
-          </Footer>
+          <VStack w="full" spacing="1px">
+            {calls.map((call, i) => (
+              <Call
+                key={i}
+                policy={{
+                  target: call.contractAddress,
+                  method: call.entrypoint,
+                }}
+                _last={{ borderBottomRadius: "md" }}
+              />
+            ))}
+          </VStack>
         </VStack>
-      </VStack>
-    </Container >
+
+        <Fees
+          error={error}
+          fees={fees}
+          balance={ethBalance && format(ethBalance)}
+        />
+      </Content>
+
+      <Footer>
+        <Button
+          colorScheme="colorful"
+          onClick={onSubmit}
+          isLoading={isLoading}
+          isDisabled={!fees}
+        >
+          submit
+        </Button>
+
+        <Button onClick={onCancel}>Cancel</Button>
+      </Footer>
+    </Container>
   );
 }

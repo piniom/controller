@@ -13,22 +13,20 @@ import { TOP_OFFSET, FOOTER_HEIGHT } from "components/layout";
 import { motion } from "framer-motion";
 import { SessionDetails } from "./SessionDetails";
 import { TransactionSummary } from "./TransactionSummary";
-import { useRouter } from "next/router";
-import { useConnection } from "hooks/connection";
 
 export function Footer({
   children,
   origin,
   policies,
-  isSignup,
   isSlot,
   showTerm = false,
+  showLogo = false
 }: React.PropsWithChildren & {
   origin?: string;
   policies?: Policy[];
-  isSignup?: boolean;
   isSlot?: boolean;
   showTerm?: boolean;
+  showLogo?: boolean;
 }) {
   const { isOpen, onToggle } = useDisclosure();
   const isExpandable = useMemo(() => !!origin, [origin]);
@@ -41,18 +39,6 @@ export function Footer({
     () =>
       isOpen ? `${window.innerHeight - TOP_OFFSET - FOOTER_HEIGHT}px` : "auto",
     [isOpen],
-  );
-
-  const { context } = useConnection();
-  const router = useRouter();
-  const showFooter = useMemo(
-    () =>
-      context?.type === "connect" ||
-      router.pathname.startsWith("/login") ||
-      router.pathname.startsWith("/signup") ||
-      router.pathname.startsWith("/slot") ||
-      router.pathname.startsWith("/authenticate"),
-    [context?.type, router.pathname],
   );
 
   return (
@@ -87,9 +73,8 @@ export function Footer({
             msOverflowStyle: "none",
           }}
         >
-          <HStack align="center">
+          <HStack align="flex-start">
             <TransactionSummary
-              isSignup={isSignup}
               isSlot={isSlot}
               showTerm={showTerm}
               hostname={hostname}
@@ -128,7 +113,7 @@ export function Footer({
         </VStack>
       </VStack>
 
-      {showFooter && (
+      {showLogo && (
         <HStack
           w="full"
           borderTopWidth={1}

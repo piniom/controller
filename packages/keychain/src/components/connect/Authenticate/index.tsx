@@ -62,7 +62,7 @@ export function Authenticate({
     <Container hideAccount>
       <Banner title={title} description={description} />
 
-      <Footer>
+      <Footer showLogo>
         <Button colorScheme="colorful" onClick={onAuth} isLoading={isLoading}>
           continue
         </Button>

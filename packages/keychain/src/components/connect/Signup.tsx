@@ -1,5 +1,5 @@
 import { Field } from "@cartridge/ui";
-import { VStack, Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import {
   Container,
   FOOTER_MIN_HEIGHT,
@@ -26,14 +26,11 @@ import { doSignup } from "hooks/account";
 import { useControllerTheme } from "hooks/theme";
 import { Error as ErrorComp } from "components/Error";
 import { shortString } from "starknet";
+import { useChainId, useOrigin, usePolicies, useRpcUrl } from "hooks/connection";
 
 export function Signup({
   prefilledName = "",
-  origin,
-  policies,
   isSlot,
-  chainId,
-  rpcUrl,
   onSuccess,
   onLogin,
 }: SignupProps) {
@@ -79,15 +76,11 @@ export function Signup({
           validateOnBlur={false}
         >
           <Form
-            chainId={chainId}
-            rpcUrl={rpcUrl}
             onLogin={onLogin}
             onSuccess={onSuccess}
             isRegistering={isRegistering}
             isLoading={isLoading}
             setIsRegistering={setIsRegistering}
-            origin={origin}
-            policies={policies}
             isSlot={isSlot}
             error={error}
           />
@@ -98,10 +91,6 @@ export function Signup({
 }
 
 function Form({
-  origin,
-  policies,
-  chainId,
-  rpcUrl,
   isRegistering,
   isLoading,
   isSlot,
@@ -115,6 +104,10 @@ function Form({
   setIsRegistering: (val: boolean) => void;
   error: Error;
 }) {
+  const origin = useOrigin();
+  const policies = usePolicies();
+  const chainId = useChainId();
+  const rpcUrl = useRpcUrl();
   const theme = useControllerTheme();
   const { values, isValidating } = useFormikContext<FormValues>();
 
@@ -181,38 +174,34 @@ function Form({
         description="Create your Cartridge Controller"
       />
 
-      <Content>
-        <VStack
-          align="stretch"
-          pb={error ? FOOTER_MIN_HEIGHT : undefined}
+      <Content pb={error ? FOOTER_MIN_HEIGHT : undefined} >
+        <FormikField
+          name="username"
+          placeholder="Username"
+          validate={validateUsernameFor("signup")}
         >
-          <FormikField
-            name="username"
-            placeholder="Username"
-            validate={validateUsernameFor("signup")}
-          >
-            {({ field, meta, form }) => (
-              <Field
-                {...field}
-                autoFocus
-                placeholder="Username"
-                touched={meta.touched}
-                error={meta.error}
-                onClear={() => form.setFieldValue(field.name, "")}
-                isLoading={isValidating}
-              />
-            )}
-          </FormikField>
+          {({ field, meta, form }) => (
+            <Field
+              {...field}
+              autoFocus
+              placeholder="Username"
+              touched={meta.touched}
+              error={meta.error}
+              onClear={() => form.setFieldValue(field.name, "")}
+              isLoading={isValidating}
+            />
+          )}
+        </FormikField>
 
-          <ErrorComp error={error} />
-        </VStack>
+        <ErrorComp error={error} />
       </Content>
 
       <Footer
         origin={origin}
         policies={policies}
-        isSignup
         isSlot={isSlot}
+        showLogo
+        showTerm
       >
         <Button type="submit" colorScheme="colorful" isLoading={isLoading}>
           sign up

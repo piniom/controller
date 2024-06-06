@@ -1,25 +1,14 @@
-import { NextPage } from "next";
-import { Container, Banner, Content } from "components/layout";
-import { AlertDuoIcon } from "@cartridge/ui";
-import { Text } from "@chakra-ui/react";
+import { Container, Banner } from "components/layout";
+import { AlertIcon } from "@cartridge/ui";
 
-const Consent: NextPage = () => {
+export default function Consent() {
   return (
     <Container hideAccount>
       <Banner
-        icon={<AlertDuoIcon boxSize={8} accent="text.error" />}
-        title="Failure"
-        description="Uh-oh something went wrong"
+        icon={<AlertIcon boxSize={9} />}
+        title="Uh-oh something went wrong"
+        description="If this problem persists swing by the Cartridge support channel on Discord"
       />
-
-      <Content>
-        <Text fontSize="xs" align="center" color="text.secondaryAccent">
-          If this problem persists swing by the Cartridge
-          <Text color="inherit">support channel on Discord</Text>
-        </Text>
-      </Content>
     </Container>
   );
 };
-
-export default Consent;
