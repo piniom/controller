@@ -16,6 +16,7 @@ import { RegistrationLink } from "./RegistrationLink";
 import { useControllerTheme } from "hooks/theme";
 import { doLogin } from "hooks/account";
 import { Error as ErrorComp } from "components/Error";
+import { Policy } from "@cartridge/controller";
 
 export function Login({
   chainId,
@@ -46,6 +47,8 @@ export function Login({
         },
       } = await fetchAccount(values.username);
 
+      console.log("bruh");
+
       const controller = new Controller({
         chainId,
         rpcUrl,
@@ -55,10 +58,22 @@ export function Login({
         credentialId,
       });
 
+      console.log("hmm");
+
+      const origin = "http://localhost:3001";
+      const policies: Policy[] = [
+        {
+          target: "0x1",
+          method: "transfer",
+        },
+      ];
+
       try {
         if (isSlot || !origin || !policies) {
+          console.log("eh", origin, policies);
           await doLogin(values.username, credentialId, publicKey);
         } else {
+          console.log("wow");
           await controller.approve(origin, expiresAt, policies);
         }
 

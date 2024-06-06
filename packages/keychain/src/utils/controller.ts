@@ -51,9 +51,13 @@ export default class Controller {
     this.rpcUrl = rpcUrl;
     this.publicKey = publicKey;
     this.credentialId = credentialId;
+
+    console.log(process.env.NEXT_PUBLIC_RP_ID);
+
     this.account = new Account(chainId, rpcUrl, address, this.signer, {
       rpId: process.env.NEXT_PUBLIC_RP_ID,
-      origin: process.env.NEXT_PUBLIC_ORIGIN,
+      // origin: process.env.NEXT_PUBLIC_ORIGIN,
+      origin: "http://localhost:3001",
       credentialId,
       publicKey,
     });
