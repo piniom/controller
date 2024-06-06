@@ -16,31 +16,29 @@ const CreateSession: NextPage = () => {
   const { controller } = useController();
 
   useEffect(() => {
-    if (controller) {
+    if (controller && queries.callback_uri) {
       const session = controller.session(origin);
       console.log("origin", origin, "my session", session);
 
       if (session) {
         const callbackUri = decodeURIComponent(queries.callback_uri);
-        const encodedSession = decodeURIComponent(JSON.stringify(session));
-        const callbackUriWithSession = `${callbackUri}?session=${encodedSession}`;
-        // console.log("callback uri", callbackUri);
 
-        // fetch(callbackUri, {
-        //   method: "POST",
-        //   body: JSON.stringify(session),
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   mode: "no-cors",
-        // })
-        fetch(callbackUriWithSession, { mode: "no-cors" });
-        // .then((res) => {
-        //   res.status === 200
-        //     ? router.replace(`/slot/auth/success`)
-        //     : router.replace(`/slot/auth/failure`);
-        // })
-        // .catch(() => router.replace(`/slot/auth/failure`));
+        fetch(callbackUri, {
+          method: "POST",
+          body: JSON.stringify(session),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => {
+            res.status === 200
+              ? router.replace(`/slot/auth/success`)
+              : new Promise((_, reject) => reject(res));
+          })
+          .catch((e) => {
+            console.error(e);
+            router.replace(`/slot/auth/failure`);
+          });
       }
     }
   }, [controller, router, queries]);
