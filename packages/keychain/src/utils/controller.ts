@@ -56,8 +56,7 @@ export default class Controller {
 
     this.account = new Account(chainId, rpcUrl, address, this.signer, {
       rpId: process.env.NEXT_PUBLIC_RP_ID,
-      // origin: process.env.NEXT_PUBLIC_ORIGIN,
-      origin: "http://localhost:3001",
+      origin: process.env.NEXT_PUBLIC_ORIGIN,
       credentialId,
       publicKey,
     });
@@ -102,7 +101,10 @@ export default class Controller {
       expiresAt,
     );
 
-    console.log("ahhh");
+    console.log("createSession result", credentials);
+    console.log("chainId", this.account.chainId);
+    console.log("origin", origin);
+    console.log("address", this.address);
 
     Storage.set(
       selectors[VERSION].session(this.address, origin, this.account.chainId),
@@ -111,6 +113,7 @@ export default class Controller {
         maxFee,
         credentials,
         expiresAt: expiresAt.toString(),
+        chaniId: this.account.chainId,
       },
     );
 
@@ -125,6 +128,9 @@ export default class Controller {
   }
 
   session(origin: string): Session | undefined {
+    console.log("chainId", this.account.chainId);
+    console.log("origin", origin);
+    console.log("address", this.address);
     return Storage.get(
       selectors[VERSION].session(this.address, origin, this.account.chainId),
     );

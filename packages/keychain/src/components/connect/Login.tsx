@@ -58,9 +58,8 @@ export function Login({
         credentialId,
       });
 
-      console.log("hmm");
+      const origin = process.env.NEXT_PUBLIC_ORIGIN;
 
-      const origin = "http://localhost:3001";
       const policies: Policy[] = [
         {
           target: "0x1",
@@ -70,10 +69,8 @@ export function Login({
 
       try {
         if (isSlot || !origin || !policies) {
-          console.log("eh", origin, policies);
           await doLogin(values.username, credentialId, publicKey);
         } else {
-          console.log("wow");
           await controller.approve(origin, expiresAt, policies);
         }
 

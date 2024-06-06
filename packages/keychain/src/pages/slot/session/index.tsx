@@ -1,19 +1,11 @@
-import { Policy } from "@cartridge/controller";
-import { Login, LoadingLogo, CreateController } from "components";
-import { useMeQuery } from "generated/graphql";
-import { useConnection } from "hooks/connection";
+import { CreateController } from "components";
 import { useController } from "hooks/controller";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { ConnectCtx } from "utils/connection";
-import Controller from "utils/controller";
+import { useEffect } from "react";
 
 type SessionQueryParams = Record<string, string> & {
-  chain_id: string;
-  rpc_url: string;
-  policies: string[];
-  expires_at: number;
+  callback_uri: string;
 };
 
 /** This page is for creating session with Slot */
@@ -21,35 +13,37 @@ const CreateSession: NextPage = () => {
   const router = useRouter();
   const queries = router.query as SessionQueryParams;
 
-  const { data: user, isFetched } = useMeQuery();
-
-  const { setContext } = useConnection();
   const { controller } = useController();
 
   useEffect(() => {
-    if (user && controller) {
-      console.log("its complete");
+    if (controller) {
+      const session = controller.session(origin);
+      console.log("origin", origin, "my session", session);
+
+      if (session) {
+        const callbackUri = decodeURIComponent(queries.callback_uri);
+        const encodedSession = decodeURIComponent(JSON.stringify(session));
+        const callbackUriWithSession = `${callbackUri}?session=${encodedSession}`;
+        // console.log("callback uri", callbackUri);
+
+        // fetch(callbackUri, {
+        //   method: "POST",
+        //   body: JSON.stringify(session),
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   mode: "no-cors",
+        // })
+        fetch(callbackUriWithSession, { mode: "no-cors" });
+        // .then((res) => {
+        //   res.status === 200
+        //     ? router.replace(`/slot/auth/success`)
+        //     : router.replace(`/slot/auth/failure`);
+        // })
+        // .catch(() => router.replace(`/slot/auth/failure`));
+      }
     }
-  }, [user, controller, router]);
-
-  if (!isFetched) {
-    return <LoadingLogo />;
-  }
-
-  const onSuccess = (controller: Controller) => {
-    router.push("/dashboard");
-  };
-
-  // return (
-  //   <Login
-  //     chainId={chainId}
-  //     rpcUrl={rpcUrl}
-  //     policies={policies}
-  //     origin="https://x.cartridge.gg"
-  //     onSignup={() => console.log("im signing up")}
-  //     onSuccess={onSuccess}
-  //   />
-  // );
+  }, [controller, router, queries]);
 
   return <CreateController />;
 };
