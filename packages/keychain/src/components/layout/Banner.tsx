@@ -11,7 +11,7 @@ import {
 import { useControllerTheme } from "hooks/theme";
 import { useMemo } from "react";
 
-export function PortalBanner({
+export function Banner({
   Icon,
   icon,
   title,

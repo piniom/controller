@@ -4,16 +4,17 @@ import { Call as StarknetCall, InvocationsDetails } from "starknet";
 import { Fees } from "./Fees";
 import { formatEther } from "viem";
 import { ExecuteReply, ResponseCodes } from "@cartridge/controller";
-import { Container } from "../Container";
+import {
+  Container,
+  Banner,
+  FOOTER_MIN_HEIGHT,
+  Footer,
+  Content,
+} from "components/layout";
 import { Status } from "utils/account";
-import { PortalBanner } from "../PortalBanner";
 import { TransactionDuoIcon } from "@cartridge/ui";
 import { Call } from "./Call";
-import {
-  PORTAL_FOOTER_MIN_HEIGHT,
-  PortalFooter,
-} from "components/PortalFooter";
-import LowEth from "./LowEth";
+import { InsufficientFunds } from "./InsufficientFunds";
 import { useChainId } from "hooks/connection";
 import { useController } from "hooks/controller";
 
@@ -46,8 +47,8 @@ export function Execute({
   }>();
   const [error, setError] = useState<Error>();
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [ethBalance, setEthBalance] = useState<bigint>();
-  const [lowEth, setLowEth] = useState<boolean>(false);
+  const [ethBalance, setEthBalance] = useState<bigint>(0n);
+  const [isInsufficient, setIsInsufficient] = useState<boolean>(false);
 
   const account = controller.account;
   const calls = useMemo(() => {
@@ -121,7 +122,7 @@ export function Execute({
     }
 
     if (ethBalance < fees.max) {
-      setLowEth(true);
+      setIsInsufficient(true);
     }
   }, [ethBalance, fees]);
 
@@ -136,9 +137,9 @@ export function Execute({
     });
   }, [account, calls, fees, onExecute]);
 
-  if (lowEth) {
+  if (isInsufficient) {
     return (
-      <LowEth
+      <InsufficientFunds
         address={controller.account.address}
         balance={format(ethBalance)}
       />
@@ -147,29 +148,31 @@ export function Execute({
 
   return (
     <Container onLogout={onLogout}>
-      <PortalBanner Icon={TransactionDuoIcon} title="Submit Transaction" />
+      <Banner Icon={TransactionDuoIcon} title="Submit Transaction" />
 
-      <VStack w="full" pb={lowEth ? undefined : PORTAL_FOOTER_MIN_HEIGHT}>
-        <VStack spacing="1px" w="full" borderRadius="md" bg="solid.primary">
-          <VStack w="full" p={3} align="flex-start">
-            <Text fontSize="xs" fontWeight="bold" color="text.secondaryAccent">
-              Actions
-            </Text>
-          </VStack>
+      <VStack w="full" pb={FOOTER_MIN_HEIGHT}>
+        <Content>
+          <VStack spacing="1px" w="full" borderRadius="md" bg="solid.primary">
+            <VStack w="full" p={3} align="flex-start">
+              <Text fontSize="xs" fontWeight="bold" color="text.secondaryAccent">
+                Actions
+              </Text>
+            </VStack>
 
-          <VStack w="full" spacing="1px">
-            {calls.map((call, i) => (
-              <Call
-                key={i}
-                policy={{
-                  target: call.contractAddress,
-                  method: call.entrypoint,
-                }}
-                _last={{ borderBottomRadius: "md" }}
-              />
-            ))}
+            <VStack w="full" spacing="1px">
+              {calls.map((call, i) => (
+                <Call
+                  key={i}
+                  policy={{
+                    target: call.contractAddress,
+                    method: call.entrypoint,
+                  }}
+                  _last={{ borderBottomRadius: "md" }}
+                />
+              ))}
+            </VStack>
           </VStack>
-        </VStack>
+        </Content>
 
         <VStack w="full">
           <Fees
@@ -178,7 +181,7 @@ export function Execute({
             balance={ethBalance && format(ethBalance)}
           />
 
-          <PortalFooter>
+          <Footer>
             <Button
               colorScheme="colorful"
               onClick={onSubmit}
@@ -189,9 +192,9 @@ export function Execute({
             </Button>
 
             <Button onClick={onCancel}>Cancel</Button>
-          </PortalFooter>
+          </Footer>
         </VStack>
       </VStack>
-    </Container>
+    </Container >
   );
 }

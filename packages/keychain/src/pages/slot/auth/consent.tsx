@@ -1,6 +1,6 @@
 import Controller from "utils/controller";
 import { Button, Text } from "@chakra-ui/react";
-import { Container, PortalBanner, PortalFooter } from "components";
+import { Container, Banner, Footer } from "components/layout";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
@@ -30,7 +30,7 @@ const Consent: NextPage = () => {
 
   return (
     <Container hideAccount>
-      <PortalBanner
+      <Banner
         title="Requesting Permission"
         description={
           <>
@@ -42,13 +42,13 @@ const Consent: NextPage = () => {
         }
       />
 
-      <PortalFooter showTerm={false}>
+      <Footer showTerm={false}>
         <Button colorScheme="colorful" onClick={onSubmit}>
           approve
         </Button>
 
         <Button onClick={onDeny}>deny</Button>
-      </PortalFooter>
+      </Footer>
     </Container>
   );
 };

@@ -1,17 +1,18 @@
 import { Field } from "@cartridge/ui";
 import { VStack, Button } from "@chakra-ui/react";
-import { Container } from "../Container";
+import {
+  Container,
+  FOOTER_MIN_HEIGHT,
+  Banner,
+  Footer,
+  Content,
+} from "components/layout";
 import {
   Form as FormikForm,
   Field as FormikField,
   Formik,
   useFormikContext,
 } from "formik";
-import {
-  PORTAL_FOOTER_MIN_HEIGHT,
-  PortalBanner,
-  PortalFooter,
-} from "components";
 import { useCallback, useEffect, useState } from "react";
 import { DeployAccountDocument, useAccountQuery } from "generated/graphql";
 import Controller from "utils/controller";
@@ -171,7 +172,7 @@ function Form({
 
   return (
     <FormikForm style={{ width: "100%" }}>
-      <PortalBanner
+      <Banner
         title={
           theme.id === "cartridge"
             ? "Play with Cartridge Controller"
@@ -180,33 +181,34 @@ function Form({
         description="Create your Cartridge Controller"
       />
 
-      <VStack
-        align="stretch"
-        pb={error ? PORTAL_FOOTER_MIN_HEIGHT : undefined}
-        px={4}
-      >
-        <FormikField
-          name="username"
-          placeholder="Username"
-          validate={validateUsernameFor("signup")}
+      <Content>
+        <VStack
+          align="stretch"
+          pb={error ? FOOTER_MIN_HEIGHT : undefined}
         >
-          {({ field, meta, form }) => (
-            <Field
-              {...field}
-              autoFocus
-              placeholder="Username"
-              touched={meta.touched}
-              error={meta.error}
-              onClear={() => form.setFieldValue(field.name, "")}
-              isLoading={isValidating}
-            />
-          )}
-        </FormikField>
+          <FormikField
+            name="username"
+            placeholder="Username"
+            validate={validateUsernameFor("signup")}
+          >
+            {({ field, meta, form }) => (
+              <Field
+                {...field}
+                autoFocus
+                placeholder="Username"
+                touched={meta.touched}
+                error={meta.error}
+                onClear={() => form.setFieldValue(field.name, "")}
+                isLoading={isValidating}
+              />
+            )}
+          </FormikField>
 
-        <ErrorComp error={error} />
-      </VStack>
+          <ErrorComp error={error} />
+        </VStack>
+      </Content>
 
-      <PortalFooter
+      <Footer
         origin={origin}
         policies={policies}
         isSignup
@@ -221,7 +223,7 @@ function Form({
         >
           Log In
         </RegistrationLink>
-      </PortalFooter>
+      </Footer>
     </FormikForm>
   );
 }

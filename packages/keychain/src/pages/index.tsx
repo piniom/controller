@@ -2,13 +2,15 @@ import dynamic from "next/dynamic";
 import { Signature } from "starknet";
 import { ResponseCodes, ExecuteReply } from "@cartridge/controller";
 import {
-  CreateController,
-  CreateSession,
   DeploymentRequired,
   Execute,
-  Logout,
   SignMessage,
 } from "components";
+import {
+  CreateController,
+  CreateSession,
+  Logout,
+} from "components/connect"
 import { useConnection } from "hooks/connection";
 import {
   ConnectionCtx,

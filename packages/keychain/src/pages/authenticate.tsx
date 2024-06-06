@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { AuthAction, Authenticate as AuthComponent } from "components";
+import { AuthAction, Authenticate as AuthComponent } from "components/connect";
 
 // auth page used for externally embedded keychain
 export default function Authenticate() {

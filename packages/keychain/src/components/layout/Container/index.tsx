@@ -1,3 +1,5 @@
+export { TOP_OFFSET } from "./Header"
+
 import {
   Container as ChakraContainer,
   VStack,

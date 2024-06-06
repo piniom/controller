@@ -2,9 +2,7 @@ import React, { useState, useCallback } from "react";
 import { Button } from "@chakra-ui/react";
 import { Unsupported, useIsSupported } from "./Unsupported";
 import { doSignup } from "hooks/account";
-import { Container } from "components/Container";
-import { PortalBanner } from "components/PortalBanner";
-import { PortalFooter } from "components/PortalFooter";
+import { Container, Banner, Footer } from "components/layout";
 
 export type AuthAction = "signup" | "login";
 
@@ -62,13 +60,13 @@ export function Authenticate({
 
   return (
     <Container hideAccount>
-      <PortalBanner title={title} description={description} />
+      <Banner title={title} description={description} />
 
-      <PortalFooter>
+      <Footer>
         <Button colorScheme="colorful" onClick={onAuth} isLoading={isLoading}>
           continue
         </Button>
-      </PortalFooter>
+      </Footer>
     </Container>
   );
 }

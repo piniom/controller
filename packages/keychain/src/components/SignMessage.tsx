@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { shortString, Signature, TypedData } from "starknet";
-import { Container } from "./Container";
-import { PortalBanner } from "./PortalBanner";
+import { Container, Banner, Footer, Content } from "components/layout";
 import { TransferDuoIcon } from "@cartridge/ui";
-import { PortalFooter } from "./PortalFooter";
 import { useController } from "hooks/controller";
 
 export function SignMessage({
@@ -62,52 +60,54 @@ export function SignMessage({
 
   return (
     <Container onLogout={onLogout}>
-      <PortalBanner
+      <Banner
         Icon={TransferDuoIcon}
         title="Signature Request"
         description={`${hostname} is asking you to sign a message`}
       />
 
-      <Flex direction="column" align="start" gap="18px" w="full">
-        {(() => {
-          if (!messageData) return <></>;
-          const ptName = messageData.primaryType;
-          const pt = messageData.types[ptName];
-          const values = (typeName: string) => {
-            const v = messageData.message[typeName];
-            if (typeof v === "object") {
-              return Object.entries(v).map(([key, value]) => {
-                return (
-                  <Text key={key}>
-                    <Text as="span" opacity="50%" textTransform="capitalize">
-                      {key}:
-                    </Text>{" "}
-                    {value as string}
-                  </Text>
-                );
-              });
-            } else {
-              return <Text>{v as string}</Text>;
-            }
-          };
+      <Content>
+        <Flex direction="column" align="start" gap="18px" w="full">
+          {(() => {
+            if (!messageData) return <></>;
+            const ptName = messageData.primaryType;
+            const pt = messageData.types[ptName];
+            const values = (typeName: string) => {
+              const v = messageData.message[typeName];
+              if (typeof v === "object") {
+                return Object.entries(v).map(([key, value]) => {
+                  return (
+                    <Text key={key}>
+                      <Text as="span" opacity="50%" textTransform="capitalize">
+                        {key}:
+                      </Text>{" "}
+                      {value as string}
+                    </Text>
+                  );
+                });
+              } else {
+                return <Text>{v as string}</Text>;
+              }
+            };
 
-          return pt.map((typ) => {
-            return (
-              <DataContainer key={typ.name} title={typ.name}>
-                {values(typ.name)}
-              </DataContainer>
-            );
-          });
-        })()}
-      </Flex>
+            return pt.map((typ) => {
+              return (
+                <DataContainer key={typ.name} title={typ.name}>
+                  {values(typ.name)}
+                </DataContainer>
+              );
+            });
+          })()}
+        </Flex>
+      </Content>
 
-      <PortalFooter>
+      <Footer>
         <Button colorScheme="colorful" onClick={onConfirm}>
           sign
         </Button>
 
         <Button onClick={onCancel}>reject</Button>
-      </PortalFooter>
+      </Footer>
     </Container>
   );
 }

@@ -1,12 +1,13 @@
 import { Field } from "@cartridge/ui";
 import { VStack, Button } from "@chakra-ui/react";
-import { Container } from "../Container";
-import { Form as FormikForm, Field as FormikField, Formik } from "formik";
 import {
-  PORTAL_FOOTER_MIN_HEIGHT,
-  PortalBanner,
-  PortalFooter,
-} from "components";
+  Container,
+  FOOTER_MIN_HEIGHT,
+  Banner,
+  Footer,
+  Content,
+} from "components/layout";
+import { Form as FormikForm, Field as FormikField, Formik } from "formik";
 import { useCallback, useState } from "react";
 import Controller from "utils/controller";
 import { FormValues, LoginProps } from "./types";
@@ -93,7 +94,7 @@ export function Login({
       >
         {(props) => (
           <FormikForm style={{ width: "100%" }}>
-            <PortalBanner
+            <Banner
               title={
                 theme.id === "cartridge"
                   ? "Play with Cartridge Controller"
@@ -102,34 +103,35 @@ export function Login({
               description="Enter your Controller username"
             />
 
-            <VStack
-              align="stretch"
-              pb={error ? PORTAL_FOOTER_MIN_HEIGHT : undefined}
-              px={4}
-            >
-              <FormikField
-                name="username"
-                placeholder="Username"
-                validate={validateUsernameFor("login")}
+            <Content>
+              <VStack
+                align="stretch"
+                pb={error ? FOOTER_MIN_HEIGHT : undefined}
               >
-                {({ field, meta, form }) => (
-                  <Field
-                    {...field}
-                    autoFocus
-                    placeholder="Username"
-                    touched={meta.touched}
-                    error={meta.error}
-                    isLoading={props.isValidating}
-                    isDisabled={isLoading}
-                    onClear={() => form.setFieldValue(field.name, "")}
-                  />
-                )}
-              </FormikField>
+                <FormikField
+                  name="username"
+                  placeholder="Username"
+                  validate={validateUsernameFor("login")}
+                >
+                  {({ field, meta, form }) => (
+                    <Field
+                      {...field}
+                      autoFocus
+                      placeholder="Username"
+                      touched={meta.touched}
+                      error={meta.error}
+                      isLoading={props.isValidating}
+                      isDisabled={isLoading}
+                      onClear={() => form.setFieldValue(field.name, "")}
+                    />
+                  )}
+                </FormikField>
 
-              <ErrorComp error={error} />
-            </VStack>
+                <ErrorComp error={error} />
+              </VStack>
+            </Content>
 
-            <PortalFooter origin={origin} policies={policies} isSlot={isSlot}>
+            <Footer origin={origin} policies={policies} isSlot={isSlot}>
               <Button
                 type="submit"
                 colorScheme="colorful"
@@ -143,7 +145,7 @@ export function Login({
               >
                 Sign up
               </RegistrationLink>
-            </PortalFooter>
+            </Footer>
           </FormikForm>
         )}
       </Formik>

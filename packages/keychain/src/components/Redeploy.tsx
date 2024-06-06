@@ -1,12 +1,11 @@
 import { addAddressPadding } from "starknet";
-import { Container } from "./Container";
+import { Container, Banner } from "components/layout";
 import Controller from "utils/controller";
 import { useEffect } from "react";
 import { client } from "utils/graphql";
 import { DeployAccountDocument, AccountInfoDocument } from "generated/graphql";
 import { Status } from "utils/account";
 import { SparklesDuoIcon } from "@cartridge/ui";
-import { PortalBanner } from "./PortalBanner";
 import { useChainId } from "hooks/connection";
 
 export function Redeploy({
@@ -41,7 +40,7 @@ export function Redeploy({
 
   return (
     <Container onLogout={onLogout}>
-      <PortalBanner
+      <Banner
         Icon={SparklesDuoIcon}
         title="Deploying your account"
         description="This may take a second, try again in a bit"

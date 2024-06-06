@@ -1,4 +1,4 @@
-import { Container, PortalBanner, PortalFooter } from "components";
+import { Container, Banner, Footer } from "components/layout";
 import { BigNumberish } from "starknet";
 import { Policy } from "@cartridge/controller";
 import { PlugNewDuoIcon } from "@cartridge/ui";
@@ -25,36 +25,34 @@ export function CreateSession({
   const [maxFees] = useState<BigNumberish>();
   return (
     <Container onLogout={onLogout}>
-      <PortalBanner
+      <Banner
         Icon={PlugNewDuoIcon}
         title="Create Session"
         description={`${origin} is requesting to connect to your Cartridge Controller`}
       />
 
-      <PortalFooter origin={origin} policies={policies}>
-        <>
-          <Button
-            colorScheme="colorful"
-            isDisabled={isConnecting}
-            isLoading={isConnecting}
-            onClick={async () => {
-              setIsConnecting(true);
-              await controller
-                .approve(origin, expiresAt, policies, maxFees)
-                .then(() => {
-                  onConnect(policies);
-                })
-                .catch(() => {
-                  setIsConnecting(false);
-                });
-            }}
-          >
-            create
-          </Button>
+      <Footer origin={origin} policies={policies}>
+        <Button
+          colorScheme="colorful"
+          isDisabled={isConnecting}
+          isLoading={isConnecting}
+          onClick={async () => {
+            setIsConnecting(true);
+            await controller
+              .approve(origin, expiresAt, policies, maxFees)
+              .then(() => {
+                onConnect(policies);
+              })
+              .catch(() => {
+                setIsConnecting(false);
+              });
+          }}
+        >
+          create
+        </Button>
 
-          <Button onClick={onCancel}>cancel</Button>
-        </>
-      </PortalFooter>
+        <Button onClick={onCancel}>cancel</Button>
+      </Footer>
     </Container>
   );
 }

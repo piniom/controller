@@ -1,16 +1,15 @@
 import { AlertIcon } from "@cartridge/ui";
-import { Container } from "components/Container";
-import { PortalBanner } from "components/PortalBanner";
+import { Container, Banner } from "components/layout";
 import { useEffect, useState } from "react";
 
 export function Unsupported({ message }: { message: string }) {
   return (
     <Container hideAccount>
-      <PortalBanner
+      <Banner
         Icon={AlertIcon}
         title="Device is not supported"
         description={message}
-      ></PortalBanner>
+      />
     </Container>
   );
 }

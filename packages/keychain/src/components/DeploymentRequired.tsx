@@ -1,12 +1,10 @@
 import { constants } from "starknet";
-import { Container } from "./Container";
+import { Container, Banner, Footer, Content } from "components/layout";
 import { useEffect, useState } from "react";
 import { Status } from "utils/account";
 import { Loading } from "./Loading";
 import { Button, Link } from "@chakra-ui/react";
 import { ExternalIcon } from "@cartridge/ui";
-import { PortalBanner } from "./PortalBanner";
-import { PortalFooter } from "./PortalFooter";
 import { useController } from "hooks/controller";
 
 export function DeploymentRequired({
@@ -48,29 +46,31 @@ export function DeploymentRequired({
   if (status === Status.DEPLOYING) {
     return (
       <Container onLogout={onLogout}>
-        <PortalBanner
+        <Banner
           Icon={Loading}
           title={"Deploying your account"}
           description="This may take a second"
         />
 
-        {status === Status.DEPLOYING && (
-          <Link
-            href={`https://${account.chainId === constants.StarknetChainId.SN_SEPOLIA
-              ? "sepolia."
-              : undefined
-              }starkscan.co/tx/${deployHash}`}
-            isExternal
-          >
-            <Button variant="link" mt={10} rightIcon={<ExternalIcon />}>
-              View on Starkscan
-            </Button>
-          </Link>
-        )}
+        <Content>
+          {status === Status.DEPLOYING && (
+            <Link
+              href={`https://${account.chainId === constants.StarknetChainId.SN_SEPOLIA
+                ? "sepolia."
+                : undefined
+                }starkscan.co/tx/${deployHash}`}
+              isExternal
+            >
+              <Button variant="link" mt={10} rightIcon={<ExternalIcon />}>
+                View on Starkscan
+              </Button>
+            </Link>
+          )}
+        </Content>
 
-        <PortalFooter>
+        <Footer>
           <Button onClick={onClose}>close</Button>
-        </PortalFooter>
+        </Footer>
       </Container>
     );
   }

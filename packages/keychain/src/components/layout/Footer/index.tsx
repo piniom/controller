@@ -9,15 +9,14 @@ import {
 import { CartridgeLogo, WedgeUpIcon } from "@cartridge/ui";
 import { Policy } from "@cartridge/controller";
 import React, { useMemo } from "react";
-import { FOOTER_HEIGHT } from "components";
+import { TOP_OFFSET, FOOTER_HEIGHT } from "components/layout";
 import { motion } from "framer-motion";
-import { TOP_OFFSET } from "../Container/Header";
 import { SessionDetails } from "./SessionDetails";
 import { TransactionSummary } from "./TransactionSummary";
 import { useRouter } from "next/router";
 import { useConnection } from "hooks/connection";
 
-export function PortalFooter({
+export function Footer({
   children,
   origin,
   policies,
@@ -151,4 +150,4 @@ export function PortalFooter({
   );
 }
 
-export const PORTAL_FOOTER_MIN_HEIGHT = 252;
+export const FOOTER_MIN_HEIGHT = 252;
